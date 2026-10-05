@@ -300,9 +300,9 @@
         <svg class="reveal-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
             <filter id="pantheon-fog-filter" filterUnits="objectBoundingBox" primitiveUnits="objectBoundingBox" x="-.15" y="-.25" width="1.3" height="1.5" color-interpolation-filters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="2.6 19" numOctaves="2" seed="13" result="cloud-grain" />
-              <feDisplacementMap in="SourceGraphic" in2="cloud-grain" scale=".085" xChannelSelector="R" yChannelSelector="G" result="soft-fracture" />
-              <feGaussianBlur in="soft-fracture" stdDeviation=".018" />
+              <feTurbulence type="fractalNoise" baseFrequency="2.6 19" numOctaves="3" seed="13" result="cloud-grain" />
+              <feDisplacementMap in="SourceGraphic" in2="cloud-grain" scale=".15" xChannelSelector="R" yChannelSelector="G" result="soft-fracture" />
+              <feGaussianBlur in="soft-fracture" stdDeviation=".026" />
             </filter>
             <mask id="pantheon-fog-mask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox" x="-.15" y="-.25" width="1.3" height="1.5" mask-type="alpha">
               <rect id="pantheon-fog-shape" x="-.15" y="1" width="1.3" height="0" fill="#fff" filter="url(#pantheon-fog-filter)" />

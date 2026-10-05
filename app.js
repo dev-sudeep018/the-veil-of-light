@@ -87,7 +87,7 @@
       : clamp(-story.getBoundingClientRect().top / travel, 0, 1);
     journeyProgress = progress;
 
-    const revealAmount = reduceMotion.matches ? 1 : smoothstep(progress, 0.78, 0.95);
+    const revealAmount = reduceMotion.matches ? 1 : smoothstep(progress, 0.78, 0.99);
     filmLayer.style.opacity = "1";
     applyPantheonReveal(revealAmount);
     goldenMist.style.opacity = (0.25 + smoothstep(progress, 0.58, 0.88) * 0.09).toFixed(3);

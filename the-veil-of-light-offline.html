@@ -328,9 +328,9 @@ html.lenis body {
         <svg class="reveal-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
             <filter id="pantheon-fog-filter" filterUnits="objectBoundingBox" primitiveUnits="objectBoundingBox" x="-.15" y="-.25" width="1.3" height="1.5" color-interpolation-filters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="2.6 19" numOctaves="2" seed="13" result="cloud-grain" />
-              <feDisplacementMap in="SourceGraphic" in2="cloud-grain" scale=".085" xChannelSelector="R" yChannelSelector="G" result="soft-fracture" />
-              <feGaussianBlur in="soft-fracture" stdDeviation=".018" />
+              <feTurbulence type="fractalNoise" baseFrequency="2.6 19" numOctaves="3" seed="13" result="cloud-grain" />
+              <feDisplacementMap in="SourceGraphic" in2="cloud-grain" scale=".15" xChannelSelector="R" yChannelSelector="G" result="soft-fracture" />
+              <feGaussianBlur in="soft-fracture" stdDeviation=".026" />
             </filter>
             <mask id="pantheon-fog-mask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox" x="-.15" y="-.25" width="1.3" height="1.5" mask-type="alpha">
               <rect id="pantheon-fog-shape" x="-.15" y="1" width="1.3" height="0" fill="#fff" filter="url(#pantheon-fog-filter)" />
@@ -480,7 +480,7 @@ html.lenis body {
       : clamp(-story.getBoundingClientRect().top / travel, 0, 1);
     journeyProgress = progress;
 
-    const revealAmount = reduceMotion.matches ? 1 : smoothstep(progress, 0.78, 0.95);
+    const revealAmount = reduceMotion.matches ? 1 : smoothstep(progress, 0.78, 0.99);
     filmLayer.style.opacity = "1";
     applyPantheonReveal(revealAmount);
     goldenMist.style.opacity = (0.25 + smoothstep(progress, 0.58, 0.88) * 0.09).toFixed(3);
