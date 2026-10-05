@@ -441,16 +441,18 @@ html.lenis body {
 
     const rise = clamp(amount, 0, 1);
     const baseY = (1 - rise) * 100;
-    const waveStrength = Math.sin(Math.PI * rise) * 1.65;
+    const waveStrength = Math.sin(Math.PI * rise) * 3.8;
     const phase = rise * 7.2;
     const points = [];
     const segments = 48;
     for (let index = 0; index <= segments; index += 1) {
       const x = index / segments;
       const wave =
-        Math.sin(x * 8.4 + phase * 0.72) * 0.56 +
-        Math.sin(x * 17.8 - phase * 1.08) * 0.29 +
-        Math.sin(x * 31.6 + phase * 0.43) * 0.15;
+        Math.sin(x * 5.2 + phase * 0.72) * 0.35 +
+        Math.sin(x * 11.5 - phase * 1.08) * 0.26 +
+        Math.sin(x * 20.5 + phase * 1.3) * 0.19 +
+        Math.sin(x * 33 - phase * 0.43) * 0.13 +
+        Math.sin(x * 49 + phase * 1.7) * 0.07;
       const y = clamp(baseY + wave * waveStrength, 0, 100);
       points.push(`${(x * 100).toFixed(2)}% ${y.toFixed(2)}%`);
     }
