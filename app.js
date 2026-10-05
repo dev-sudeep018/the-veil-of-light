@@ -43,7 +43,7 @@
   let hasPointer = false;
   let journeyProgress = 0;
   let artworkInteractive = false;
-  let lastVideoSeek = 0;
+  let lastVideoSeek = -Infinity;
   let raf = 0;
   let animationFrame = 0;
   let lastAnimatedAt = 0;
