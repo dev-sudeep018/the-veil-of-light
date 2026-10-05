@@ -8,6 +8,7 @@
   const cloudFilm = document.querySelector("#cloud-film");
   const goldenMist = document.querySelector("#golden-mist");
   const emergenceHaze = document.querySelector("#emergence-haze");
+  const pantheonFogShape = document.querySelector("#pantheon-fog-shape");
   const captions = [
     { element: document.querySelector("#caption-one"), inStart: -0.02, inEnd: 0.025, outStart: 0.22, outEnd: 0.32 },
     { element: document.querySelector("#caption-two"), inStart: 0.285, inEnd: 0.355, outStart: 0.50, outEnd: 0.60 },
@@ -65,32 +66,18 @@
 
   function applyPantheonReveal(amount) {
     if (reduceMotion.matches) {
-      art.style.clipPath = "none";
+      pantheonFogShape.setAttribute("y", "0");
+      pantheonFogShape.setAttribute("height", "1.4");
       emergenceHaze.style.opacity = "0";
       return;
     }
 
     const rise = clamp(amount, 0, 1);
     const baseY = (1 - rise) * 100;
-    const waveStrength = Math.sin(Math.PI * rise) * 3.8;
-    const phase = rise * 7.2;
-    const points = [];
-    const segments = 48;
-    for (let index = 0; index <= segments; index += 1) {
-      const x = index / segments;
-      const wave =
-        Math.sin(x * 5.2 + phase * 0.72) * 0.35 +
-        Math.sin(x * 11.5 - phase * 1.08) * 0.26 +
-        Math.sin(x * 20.5 + phase * 1.3) * 0.19 +
-        Math.sin(x * 33 - phase * 0.43) * 0.13 +
-        Math.sin(x * 49 + phase * 1.7) * 0.07;
-      const y = clamp(baseY + wave * waveStrength, 0, 100);
-      points.push(`${(x * 100).toFixed(2)}% ${y.toFixed(2)}%`);
-    }
-
-    art.style.clipPath = `polygon(${points.join(",")}, 100% 100%, 0% 100%)`;
+    pantheonFogShape.setAttribute("y", (1 - rise).toFixed(4));
+    pantheonFogShape.setAttribute("height", rise <= 0.001 ? "0" : (1.4 - (1 - rise)).toFixed(4));
     emergenceHaze.style.setProperty("--reveal-y", `${baseY.toFixed(2)}%`);
-    emergenceHaze.style.opacity = (Math.sin(Math.PI * rise) * 0.34).toFixed(3);
+    emergenceHaze.style.opacity = (Math.sin(Math.PI * rise) * 0.4).toFixed(3);
   }
 
   function updateJourney() {

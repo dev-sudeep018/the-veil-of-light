@@ -62,6 +62,13 @@
       overflow: hidden;
       background: #c4b898;
     }
+    .reveal-definitions {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
     .cloud-film {
       position: absolute;
       inset: 0;
@@ -114,8 +121,13 @@
       margin: 0;
       overflow: hidden;
       pointer-events: none;
-      clip-path: inset(100% 0 0 0);
-      will-change: clip-path;
+      -webkit-mask-image: url(#pantheon-fog-mask);
+      mask-image: url(#pantheon-fog-mask);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      mask-mode: alpha;
       background: linear-gradient(180deg, var(--paper) 0 var(--art-top), var(--paper) var(--art-top), var(--paper-shadow) calc(var(--art-top) + var(--art-height)), var(--paper-shadow) 100%);
       --mx: 50%;
       --my: 50%;
@@ -276,7 +288,7 @@
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
       .pilgrimage { height: 100vh; height: 100svh; }
       .film-layer, .golden-mist, .emergence-haze, .caption-track { display: none !important; }
-      .artwork { opacity: 1 !important; clip-path: none !important; pointer-events: auto !important; }
+      .artwork { opacity: 1 !important; -webkit-mask-image: none !important; mask-image: none !important; pointer-events: auto !important; }
       .artwork::before { animation: none; }
     }
   </style>
@@ -285,6 +297,18 @@
   <main>
     <section class="pilgrimage" id="pilgrimage" aria-label="A cinematic passage into the divine pantheon">
       <div class="scene" id="scene">
+        <svg class="reveal-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <filter id="pantheon-fog-filter" filterUnits="objectBoundingBox" primitiveUnits="objectBoundingBox" x="-.15" y="-.25" width="1.3" height="1.5" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="2.6 19" numOctaves="2" seed="13" result="cloud-grain" />
+              <feDisplacementMap in="SourceGraphic" in2="cloud-grain" scale=".085" xChannelSelector="R" yChannelSelector="G" result="soft-fracture" />
+              <feGaussianBlur in="soft-fracture" stdDeviation=".018" />
+            </filter>
+            <mask id="pantheon-fog-mask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox" x="-.15" y="-.25" width="1.3" height="1.5" mask-type="alpha">
+              <rect id="pantheon-fog-shape" x="-.15" y="1" width="1.3" height="0" fill="#fff" filter="url(#pantheon-fog-filter)" />
+            </mask>
+          </defs>
+        </svg>
         <div class="film-layer" id="film-layer" aria-hidden="true">
           <video class="cloud-film" id="cloud-film" muted playsinline preload="auto" poster="assets/clouds-poster.webp" aria-label="Clouds moving above the heavens">
             <source src="assets/divine-rise-extended.mp4" type="video/mp4">
