@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ede8de">
+  <meta name="description" content="A scroll-led passage from the last light into a living pantheon.">
+  <title>The Veil of Light — A Pantheon in Motion</title>
+  <link rel="preload" href="assets/cormorant-garamond-600.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/lenis.css">
+  <style>
+    @font-face {
+      font-family: "Cormorant Editorial";
+      src: url("assets/cormorant-garamond-600.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+    :root {
+      color-scheme: light;
+      --paper: #ede8de;
+      --paper-shadow: #d8d1c3;
+      --gold: #b18439;
+      --ink: #332d23;
+      --flap-period: 190ms;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--paper); }
+    body {
+      overflow-x: hidden;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      font-family: "Cormorant Editorial", Georgia, serif;
+    }
+    body.has-custom-cursor, body.has-custom-cursor * { cursor: none !important; }
+    .pilgrimage {
+      position: relative;
+      height: 430vh;
+      height: 430svh;
+      background: var(--paper);
+      isolation: isolate;
+    }
+    .scene {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      min-height: 480px;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--paper);
+      --art-top: max(0px, calc(100svh - min(100svh, 50vw)));
+      --art-height: min(100svh, 50vw);
+    }
+    .film-layer {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      background: #c4b898;
+    }
+    .cloud-film {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 50%;
+      filter: sepia(.52) saturate(.62) hue-rotate(-4deg) brightness(1.08);
+      transform: scale(1.025);
+      user-select: none;
+    }
+    .film-grade {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 73% 68% at 52% 43%, rgba(255, 232, 185, .16), transparent 76%),
+        linear-gradient(180deg, rgba(75, 58, 31, .06), rgba(88, 68, 37, .02) 40%, rgba(75, 57, 30, .13) 100%);
+      mix-blend-mode: soft-light;
+    }
+    .film-vignette {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 44%, transparent 42%, rgba(48, 37, 20, .10) 100%);
+    }
+    .golden-mist {
+      position: absolute;
+      z-index: 4;
+      inset: -14% -10%;
+      pointer-events: none;
+      opacity: .28;
+      mix-blend-mode: screen;
+      filter: blur(34px);
+      background:
+        radial-gradient(ellipse 36% 15% at 13% 15%, rgba(255, 227, 173, .66), transparent 76%),
+        radial-gradient(ellipse 49% 18% at 55% 2%, rgba(255, 244, 215, .72), transparent 78%),
+        radial-gradient(ellipse 41% 17% at 91% 82%, rgba(232, 194, 120, .57), transparent 78%),
+        radial-gradient(ellipse 47% 15% at 32% 100%, rgba(255, 240, 206, .66), transparent 77%);
+      animation: cloud-drift 34s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    .artwork {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      margin: 0;
+      overflow: hidden;
+      pointer-events: none;
+      clip-path: inset(100% 0 0 0);
+      will-change: clip-path;
+      background: linear-gradient(180deg, var(--paper) 0 var(--art-top), var(--paper) var(--art-top), var(--paper-shadow) calc(var(--art-top) + var(--art-height)), var(--paper-shadow) 100%);
+      --mx: 50%;
+      --my: 50%;
+    }
+    .artwork:focus { outline: none; }
+    .art-image {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .scene-light { position: absolute; z-index: 3; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
+    .artwork::before {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      inset: -10% -8%;
+      pointer-events: none;
+      opacity: .28;
+      mix-blend-mode: screen;
+      filter: blur(28px);
+      background:
+        radial-gradient(ellipse 38% 15% at 12% 16%, rgba(255, 230, 174, .64), transparent 76%),
+        radial-gradient(ellipse 48% 17% at 54% 1%, rgba(255, 247, 218, .68), transparent 78%),
+        radial-gradient(ellipse 40% 18% at 91% 83%, rgba(245, 216, 160, .58), transparent 77%),
+        radial-gradient(ellipse 48% 14% at 35% 100%, rgba(255, 244, 211, .62), transparent 76%);
+      animation: cloud-drift 34s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    .artwork::after {
+      content: "";
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(ellipse 190px 160px at var(--mx) var(--my), rgba(255, 250, 222, .64), rgba(255, 231, 169, .22) 28%, transparent 76%);
+      mix-blend-mode: screen;
+    }
+    .artwork.lighting-fallback::after { opacity: .9; }
+    .emergence-haze {
+      position: absolute;
+      z-index: 5;
+      top: var(--reveal-y, 100%);
+      left: -10%;
+      width: 120%;
+      height: clamp(130px, 24vh, 290px);
+      transform: translate3d(0, -50%, 0);
+      pointer-events: none;
+      opacity: 0;
+      filter: blur(24px);
+      mix-blend-mode: screen;
+      background:
+        radial-gradient(ellipse 30% 42% at 8% 50%, rgba(255, 248, 225, .42), transparent 78%),
+        radial-gradient(ellipse 39% 48% at 34% 47%, rgba(243, 217, 166, .26), transparent 80%),
+        radial-gradient(ellipse 35% 43% at 68% 54%, rgba(255, 247, 222, .34), transparent 79%),
+        radial-gradient(ellipse 32% 46% at 96% 48%, rgba(235, 205, 147, .28), transparent 80%),
+        linear-gradient(180deg, transparent 17%, rgba(255, 245, 218, .08) 47%, rgba(252, 230, 187, .11) 54%, transparent 84%);
+      will-change: top, opacity;
+    }
+    .hero-vignette {
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(52, 45, 32, .10) 100%);
+    }
+    .caption-track {
+      position: absolute;
+      z-index: 6;
+      inset: 0;
+      pointer-events: none;
+    }
+    .caption {
+      position: absolute;
+      left: clamp(28px, 9.1vw, 156px);
+      bottom: clamp(105px, 15vh, 164px);
+      width: min(78vw, 1050px);
+      margin: 0;
+      color: #fff9ec;
+      font-size: clamp(3.35rem, 7.4vw, 7.7rem);
+      font-weight: 600;
+      letter-spacing: -.047em;
+      line-height: .89;
+      text-wrap: balance;
+      text-shadow: 0 2px 28px rgba(41, 30, 16, .24);
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+      will-change: opacity, transform;
+    }
+    .caption.is-ink { color: #403521; text-shadow: 0 2px 18px rgba(252, 247, 233, .42); }
+    .snitch-cursor {
+      --cx: -100px;
+      --cy: -100px;
+      --light-x: -2px;
+      --light-y: -5px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 30;
+      width: 68px;
+      height: 39px;
+      pointer-events: none;
+      transform: translate3d(var(--cx), var(--cy), 0) translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 160ms ease;
+      filter: drop-shadow(0 1px 2px rgba(89, 64, 16, .2));
+      will-change: transform;
+    }
+    .snitch-cursor.visible { opacity: 1; }
+    .snitch-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .wing { opacity: 0; transform-box: view-box; transition: opacity 90ms ease; }
+    .wing-left { transform-origin: 82px 55px; transform: scaleX(.015); }
+    .wing-right { transform-origin: 108px 55px; transform: scaleX(.015); }
+    .wing-flap-left { transform-box: view-box; transform-origin: 82px 55px; }
+    .wing-flap-right { transform-box: view-box; transform-origin: 108px 55px; }
+    .snitch-cursor.awake .wing { opacity: 1; }
+    .snitch-cursor.awake .wing-left { animation: unfurl-left 190ms cubic-bezier(.16,.78,.25,1) both; }
+    .snitch-cursor.awake .wing-right { animation: unfurl-right 190ms cubic-bezier(.16,.78,.25,1) both; }
+    .snitch-cursor.awake .wing-flap-left { animation: flap-left var(--flap-period) ease-in-out infinite alternate; }
+    .snitch-cursor.awake .wing-flap-right { animation: flap-right calc(var(--flap-period) * 1.08) ease-in-out infinite alternate; }
+    .snitch-core { transform-box: fill-box; transform-origin: center; }
+    .snitch-cursor.jiggle .snitch-core { animation: snitch-jiggle 570ms cubic-bezier(.17,.83,.19,1); }
+    .orb-sheen { transform: translate(var(--light-x), var(--light-y)); transition: transform 120ms ease; }
+    .cursor-glow { opacity: .15; transition: opacity 180ms ease; }
+    .snitch-cursor.awake .cursor-glow { opacity: .45; }
+    @keyframes unfurl-left { from { transform: scaleX(.02) rotate(11deg); } to { transform: scaleX(1) rotate(-1deg); } }
+    @keyframes unfurl-right { from { transform: scaleX(.02) rotate(-11deg); } to { transform: scaleX(1) rotate(1deg); } }
+    @keyframes flap-left { from { transform: rotate(-5deg) translateY(1px); } to { transform: rotate(7deg) translateY(-2px); } }
+    @keyframes flap-right { from { transform: rotate(6deg) translateY(-1px); } to { transform: rotate(-7deg) translateY(2px); } }
+    @keyframes snitch-jiggle {
+      0% { transform: translate(0,0) rotate(0) scale(1); }
+      13% { transform: translate(-3px,2px) rotate(-12deg) scale(1.08); }
+      29% { transform: translate(4px,-2px) rotate(10deg) scale(.97); }
+      46% { transform: translate(-2px,-1px) rotate(-6deg) scale(1.035); }
+      64% { transform: translate(1px,2px) rotate(4deg) scale(.99); }
+      82% { transform: translate(-1px,0) rotate(-2deg) scale(1.01); }
+      100% { transform: translate(0,0) rotate(0) scale(1); }
+    }
+    @keyframes cloud-drift {
+      from { transform: translate3d(-1.15%, -.45%, 0) scale(1.015); }
+      to { transform: translate3d(1.25%, .75%, 0) scale(1.045); }
+    }
+    @media (max-width: 700px) {
+      .pilgrimage { height: 470vh; height: 470svh; }
+      .scene { min-height: 420px; }
+      .caption { left: 7vw; bottom: 16vh; width: 86vw; font-size: clamp(3.1rem, 12.6vw, 5.6rem); line-height: .92; }
+      .snitch-cursor { width: 60px; height: 35px; }
+    }
+    @media (hover: none), (pointer: coarse) { .snitch-cursor { display: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      .pilgrimage { height: 100vh; height: 100svh; }
+      .film-layer, .golden-mist, .emergence-haze, .caption-track { display: none !important; }
+      .artwork { opacity: 1 !important; clip-path: none !important; pointer-events: auto !important; }
+      .artwork::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="pilgrimage" id="pilgrimage" aria-label="A cinematic passage into the divine pantheon">
+      <div class="scene" id="scene">
+        <div class="film-layer" id="film-layer" aria-hidden="true">
+          <video class="cloud-film" id="cloud-film" muted playsinline preload="auto" poster="assets/clouds-poster.webp" aria-label="Clouds moving above the heavens">
+            <source src="assets/divine-rise-extended.mp4" type="video/mp4">
+          </video>
+          <div class="film-grade"></div>
+          <div class="film-vignette"></div>
+        </div>
+
+        <div class="golden-mist" id="golden-mist" aria-hidden="true"></div>
+
+        <figure class="artwork" id="artwork" tabindex="-1" aria-label="A sculpted pantheon. At the end of the passage, move the pointer to draw a golden reflection; press and drag to reveal the figures in color. Keyboard: arrow keys move the light, hold Space with arrows to reveal color.">
+          <img class="art-image art-porcelain" src="assets/porcelain-gods.webp" alt="A single sculpted pantheon of gods, guardians, and a lion in pale stone" draggable="false">
+          <canvas class="scene-light" id="scene-light" aria-hidden="true"></canvas>
+          <div class="hero-vignette" aria-hidden="true"></div>
+        </figure>
+
+        <div class="emergence-haze" id="emergence-haze" aria-hidden="true"></div>
+
+        <div class="caption-track" aria-hidden="true">
+          <p class="caption" id="caption-one">The last light leaves the world.</p>
+          <p class="caption" id="caption-two">The heavens hold their breath.</p>
+          <p class="caption is-ink" id="caption-three">And light begins again.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="snitch-cursor" id="snitch-cursor" aria-hidden="true">
+    <svg class="snitch-svg" viewBox="0 0 190 110" role="presentation">
+      <defs>
+        <radialGradient id="orbGold" cx=".31" cy=".25" r=".82"><stop offset="0" stop-color="#fff9dc"/><stop offset=".12" stop-color="#f9df8c"/><stop offset=".32" stop-color="#e3b74e"/><stop offset=".57" stop-color="#a96e16"/><stop offset=".76" stop-color="#eac35c"/><stop offset="1" stop-color="#5c3e12"/></radialGradient>
+        <radialGradient id="orbHot" cx=".35" cy=".25" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".26" stop-color="#fff7d0" stop-opacity=".43"/><stop offset="1" stop-color="#fff0a0" stop-opacity="0"/></radialGradient>
+        <radialGradient id="orbitGlow"><stop offset="0" stop-color="#ffe59b" stop-opacity=".42"/><stop offset=".48" stop-color="#e8b750" stop-opacity=".13"/><stop offset="1" stop-color="#e8b750" stop-opacity="0"/></radialGradient>
+        <filter id="goldBlur" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+      <ellipse class="cursor-glow" cx="95" cy="56" rx="48" ry="34" fill="url(#orbitGlow)" filter="url(#goldBlur)"/>
+      <g class="wing wing-left"><g class="wing-flap-left"><image href="assets/snitch-wing-left.webp" x="0" y="29" width="82" height="27" preserveAspectRatio="none"/></g></g>
+      <g class="wing wing-right"><g class="wing-flap-right"><image href="assets/snitch-wing-right.webp" x="108" y="29" width="82" height="27" preserveAspectRatio="none"/></g></g>
+      <g class="snitch-core">
+        <circle cx="95" cy="55" r="21.5" fill="#784e13" opacity=".28" transform="translate(0 2)"/>
+        <circle cx="95" cy="54" r="20" fill="url(#orbGold)" stroke="#6b4714" stroke-width="1.1"/>
+        <path d="M77 48 C85 44 105 44 113 49 M76 55 C84 51 106 51 114 56 M78 63 C86 59 104 59 112 64" fill="none" stroke="#f8df91" stroke-width="1.15" opacity=".72"/>
+        <path d="M79 44 C87 39 103 38 110 43 M83 38 C88 34 95 33 100 34" fill="none" stroke="#fff6d2" stroke-width="1.2" opacity=".8"/>
+        <ellipse class="orb-sheen" cx="88" cy="45" rx="9" ry="13" fill="url(#orbHot)"/><circle cx="88" cy="42" r="2.2" fill="#fff9e6" opacity=".95"/>
+        <circle cx="95" cy="54" r="17.6" fill="none" stroke="#75490e" stroke-width=".55" opacity=".55"/>
+      </g>
+    </svg>
+  </div>
+
+  <script src="assets/lenis.min.js"></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
