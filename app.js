@@ -665,6 +665,7 @@
   window.addEventListener("blur", () => endDrag());
   window.addEventListener("resize", resize, { passive: true });
   window.addEventListener("scroll", updateJourney, { passive: true });
+  cloudFilm.addEventListener("loadeddata", updateJourney);
   if ("ResizeObserver" in window) new ResizeObserver(resize).observe(art);
 
   initWebGL();
